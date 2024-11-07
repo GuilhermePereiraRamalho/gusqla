@@ -10,8 +10,8 @@ class Lote(ModelBase):
 
     id: int = sa.Column(sa.BigInteger, primary_key=True, autoincrement=True)
     data_criacao: datetime = sa.Column(sa.DateTime, default=datetime.now, index=True)
-    id_tipo_picole: int = sa.Column(sa.Integer, sa.ForeignKey('tipos_picole.id'))
 
+    id_tipo_picole: int = sa.Column(sa.Integer, sa.ForeignKey('tipos_picole.id'))
     tipo_picole: TipoPicole = orm.relationship('TipoPicole', lazy="joined")
 
     quantidade: int = sa.Column(sa.Integer, nullable=False)
