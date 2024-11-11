@@ -18,24 +18,24 @@ from models.aditivo_nutritivo import AditivoNutritivo
 ingredientes_picole = sa.Table(
     "ingredientes_picole",
     ModelBase.metadata,
-    sa.column('id_picole', sa.Integer, sa.ForeignKey("picoles.id")),
-    sa.column('id_ingrediente', sa.Integer, sa.ForeignKey("ingredientes.id"))
+    sa.Column('id_picole', sa.Integer, sa.ForeignKey("picoles.id")),
+    sa.Column('id_ingrediente', sa.Integer, sa.ForeignKey("ingredientes.id"))
 )
 
 #Many to many picole/conservante
 conservantes_picole = sa.Table(
     "conservantes_picole",
     ModelBase.metadata,
-    sa.column('id_picole', sa.Integer, sa.ForeignKey("picoles.id")),
-    sa.column('id_conservante', sa.Integer, sa.ForeignKey("conservantes.id"))
+    sa.Column('id_picole', sa.Integer, sa.ForeignKey("picoles.id")),
+    sa.Column('id_conservante', sa.Integer, sa.ForeignKey("conservantes.id"))
 )
 
 #Many to many picole/aditivo_nutritivo
 aditivos_nutritivos_picole = sa.Table(
     "aditivos_nutritivos_picole",
     ModelBase.metadata,
-    sa.column('id_picole', sa.Integer, sa.ForeignKey("picoles.id")),
-    sa.column('id_aditivo_nutritivo', sa.Integer, sa.ForeignKey("aditivos_nutritivos.id"))
+    sa.Column('id_picole', sa.Integer, sa.ForeignKey("picoles.id")),
+    sa.Column('id_aditivo_nutritivo', sa.Integer, sa.ForeignKey("aditivos_nutritivos.id"))
 )
 
 

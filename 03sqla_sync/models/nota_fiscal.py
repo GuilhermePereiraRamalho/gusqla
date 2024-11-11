@@ -10,8 +10,8 @@ from models.lote import Lote
 lotes_nota_fiscal = sa.Table(
     "lotes_nota_fiscal",
     ModelBase.metadata,
-    sa.column('id_nota_fiscal', sa.Integer, sa.ForeignKey("notas_fiscais.id")),
-    sa.column('id_lote', sa.Integer, sa.ForeignKey("lotes.id"))
+    sa.Column('id_nota_fiscal', sa.Integer, sa.ForeignKey("notas_fiscais.id")),
+    sa.Column('id_lote', sa.Integer, sa.ForeignKey("lotes.id"))
 )
 
 class NotaFiscal(ModelBase):
