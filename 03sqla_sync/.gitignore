@@ -1,2 +1,5 @@
 03sqla_sync/
 __pycache__/
+*.log
+*.pot
+*.pyc
