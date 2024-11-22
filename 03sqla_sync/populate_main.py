@@ -255,7 +255,7 @@ def popular():
     populate_ingrediente()
 
     #6) Conservantes 
-    populate_conservante()
+    # populate_conservante()
     
     #7) Revendedores
     populate_revendedor()
