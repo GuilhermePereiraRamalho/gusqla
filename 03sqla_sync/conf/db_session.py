@@ -24,10 +24,10 @@ def create_engine(sqlite: bool = False) -> Engine:
         folder.mkdir(parents=True, exist_ok=True)
 
         conn_str = f'sqlite:///{arquivo_db}'
-        __engine = sa.create_engine(url=conn_str, echo=True, connect_args={"check_same_thread": False})
+        __engine = sa.create_engine(url=conn_str, echo=False, connect_args={"check_same_thread": False})
     else:
         conn_str = "postgresql://postgres:12345@localhost:5432/picoles"
-        __engine = sa.create_engine(url=conn_str, echo=True)
+        __engine = sa.create_engine(url=conn_str, echo=False)
 
     return __engine
 
