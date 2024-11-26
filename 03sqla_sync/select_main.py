@@ -125,10 +125,10 @@ def select_agregacao() -> None:
 
 if __name__ == '__main__':
     # select_todos_aditivos_nutritivos()
-    # select_filtro_sabor(21)
+    select_filtro_sabor(21)
     # select_complexo_picole()
     # select_order_by_sabor()
     # select_group_by_picole()
     # select_limit()
     # select_count_revendedor()
-    select_agregacao()
+    # select_agregacao()
