@@ -30,7 +30,7 @@ def create_engine(sqlite: bool = False) -> AsyncEngine:
             )
     else:
         # Postgres
-        conn_str = "postgres+asyncpg://postgres:12345@localhost:5432/picoles"
+        conn_str = "postgresql+asyncpg://postgres:12345@localhost:5432/picoles"
         __async_engine = create_async_engine(url=conn_str, echo=False)
 
     return __async_engine

@@ -179,8 +179,8 @@ def insert_lote() -> Lote:
     print('Cadastrando Lote')
     print('----------------')
 
-    id_tipo_picole: int = input('Informe o ID do Tipo de Picolé: ')
-    quantidade: int = input('Informe a quantidade de picolé: ')
+    id_tipo_picole: int = int(input('Informe o ID do Tipo de Picolé: '))
+    quantidade: int = int(input('Informe a quantidade de picolé: '))
 
     lote: Lote = Lote(id_tipo_picole=id_tipo_picole, quantidade=quantidade)
 
