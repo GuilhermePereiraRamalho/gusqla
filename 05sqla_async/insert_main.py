@@ -203,6 +203,8 @@ async def insert_nota_fiscal() -> None:
         session.add(nf)
 
         await session.commit()
+        await session.refresh(nf)
+
         print('-----------------------------------')
         print('Nota Fiscal cadastrada com sucesso!')
         print(f"ID: {nf.id}")
@@ -211,7 +213,7 @@ async def insert_nota_fiscal() -> None:
         print(f"Número de Serie: {nf.numero_serie}")
         print(f"Descrição: {nf.descricao}")
         print(f"ID Revendedor: {nf.id_revendedor}")
-        # print(f"Revendedor: {nf.revendedor.razao_social}")
+        print(f"Revendedor: {nf.revendedor.razao_social}")
 
 
 # tabela 10
@@ -245,14 +247,16 @@ async def insert_picole() -> None:
         session.add(picole)
 
         await session.commit()
+        await session.refresh(picole)
+
         print('------------------------------')
         print('Picolé cadastrado com sucesso!')
         print(f"ID: {picole.id}")
         print(f"Data: {picole.data_criacao}")
         print(f"Preço: {picole.preco}")
-        # print(f"Sabor: {picole.sabor.nome}")
-        # print(f"Tipo Picolé: {picole.tipo_picole.nome}")
-        # print(f"Tipo Embalagem: {picole.tipo_embalagem.nome}")
+        print(f"Sabor: {picole.sabor.nome}")
+        print(f"Tipo Picolé: {picole.tipo_picole.nome}")
+        print(f"Tipo Embalagem: {picole.tipo_embalagem.nome}")
         print(f"Ingredientes: {picole.ingredientes}")
         print(f"Conservantes: {picole.conservantes}")
         print(f"Aditivos Nutritivos: {picole.aditivos_nutritivos}")
@@ -311,7 +315,7 @@ if __name__ == '__main__':
     # print(f'Quantidade: {lote.quantidade}')
 
     # tabela 9
-    # asyncio.run(insert_nota_fiscal())
+    asyncio.run(insert_nota_fiscal())
 
     # tabela 10
-    asyncio.run(insert_picole())
+    # asyncio.run(insert_picole())
