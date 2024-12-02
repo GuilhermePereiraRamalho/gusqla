@@ -1,5 +1,7 @@
+import asyncio
 from typing import List
 from sqlalchemy import func
+from sqlalchemy.future import select
 from conf.helpers import formata_data
 from conf.db_session import create_session
 # select simples
@@ -11,13 +13,15 @@ from models.picole import Picole
 
 
 ## Select simples -> SELECT * FROM aditivos_nutritivos
-def select_todos_aditivos_nutritivos() -> None:
-    with create_session() as session:
-        # forma 1
-        #aditivos_nutritivos: List[AditivoNutritivo] = session.query(AditivoNutritivo)
+async def select_todos_aditivos_nutritivos() -> None:
+    async with create_session() as session:
+        query = select(AditivoNutritivo)
+        aditivos_nutritivos: List[AditivoNutritivo] = await session.execute(query)
+        aditivos_nutritivos = aditivos_nutritivos.scalars().all()
 
-        #forma 2
-        aditivos_nutritivos: List[AditivoNutritivo] = session.query(AditivoNutritivo).all()
+        """
+        aditivos_nutritivos: List[AditivoNutritivo] = await session.execute(select(AditivoNutritivo)).scalars().all()
+        """
 
         for an in aditivos_nutritivos:
             print(f'ID: {an.id}')
@@ -26,28 +30,35 @@ def select_todos_aditivos_nutritivos() -> None:
             print(f'Fórmula Química: {an.formula_quimica}')
 
 
-def select_filtro_sabor(id_sabor: int) -> None:
-    with create_session() as session:
-        # forma 1 -> Retona none caso nao encontre
-        # sabor: Sabor = session.query(Sabor).filter(Sabor.id == id_sabor).first()
+async def select_filtro_sabor(id_sabor: int) -> None:
+    async with create_session() as session:
+        query = select(Sabor).filter(Sabor.id == id_sabor)
+        # query = select(Sabor).where(Sabor.id == id_sabor)
 
-        # forma 2 -> Retona none caso nao encontre(Recomendado)
-        # sabor: Sabor = session.query(Sabor).filter(Sabor.id == id_sabor).one_or_none()
+        result = await session.execute(query)
 
-        # forma 3 -> Retona exec.NoresultFound caso nao encontr
-        # sabor: Sabor = session.query(Sabor).filter(Sabor.id == id_sabor).one()
+        # forma 1
+        # sabor: Sabor = result.scalars().first()
 
-        # forma 4 -> Usando where (one, one_or_none, first)
-        sabor: Sabor = session.query(Sabor).where(Sabor.id == id_sabor).one_or_none()
+        # forma 2
+        # sabor: Sabor = result.scalars().one_or_none()
+
+        # forma 3
+        # sabor: Sabor = result.scalars().one()
+
+        # forma 4
+        sabor: Sabor = result.scalar_one_or_none()
 
         print(f"ID: {sabor.id}")
         print(f"Data: {formata_data(sabor.data_criacao)}")
         print(f"Nome: {sabor.nome}")
 
 
-def select_complexo_picole() -> None:
-    with create_session() as session:
-        picoles: List[Picole] = session.query(Picole).all()
+async def select_complexo_picole() -> None:
+    async with create_session() as session:
+        query = select(Picole)
+        result = await session.execute(query)
+        picoles: List[Picole] = result.scalars().unique().all()
 
         for picole in picoles:
             print(f'ID: {picole.id}')
@@ -68,9 +79,11 @@ def select_complexo_picole() -> None:
             print(f'Conservantes: {picole.conservantes}')
 
 
-def select_order_by_sabor() -> None:
-    with create_session() as session:
-        sabores: List[Sabor] = session.query(Sabor).order_by(Sabor.data_criacao.desc()).all()
+async def select_order_by_sabor() -> None:
+    async with create_session() as session:
+        query = select(Sabor).order_by(Sabor.data_criacao.desc())
+        result = await session.execute(query)
+        sabores: List[Sabor] = result.scalars().all()
 
         for sabor in sabores:
             print(f"ID: {sabor.id}")
@@ -124,10 +137,10 @@ def select_agregacao() -> None:
 
 
 if __name__ == '__main__':
-    # select_todos_aditivos_nutritivos()
-    select_filtro_sabor(21)
-    # select_complexo_picole()
-    # select_order_by_sabor()
+    # asyncio.run(select_todos_aditivos_nutritivos())
+    # asyncio.run(select_filtro_sabor(21))
+    # asyncio.run(select_complexo_picole())
+    asyncio.run(select_order_by_sabor())
     # select_group_by_picole()
     # select_limit()
     # select_count_revendedor()
