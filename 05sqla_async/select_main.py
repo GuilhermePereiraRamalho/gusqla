@@ -90,9 +90,11 @@ async def select_order_by_sabor() -> None:
             print(f"Nome: {sabor.nome}")
 
 
-def select_group_by_picole() -> None:
-    with create_session() as session:
-        picoles: List[Picole] = session.query(Picole).group_by(Picole.id, Picole.id_tipo_picole).all()
+async def select_group_by_picole() -> None:
+    async with create_session() as session:
+        query = select(Picole).group_by(Picole.id, Picole.id_tipo_picole)
+        result = await session.execute(query)
+        picoles: List[Picole] = result.scalars().unique().all()
 
         for picole in picoles:
             print(f'ID: {picole.id}')
@@ -101,30 +103,36 @@ def select_group_by_picole() -> None:
             print(f'Preço: {picole.preco}')
 
 
-def select_limit() -> None:
-    with create_session() as session:
-        sabores: List[Sabor] = session.query(Sabor).limit(25)
+async def select_limit() -> None:
+    async with create_session() as session:
+        query = select(Sabor).limit(25)
+        result = await session.execute(query)
+        sabores: List[Sabor] = result.scalars()
 
         for sabor in sabores:
             print(f'ID: {sabor.id}')
             print(f'Nome: {sabor.nome}')
 
 
-def select_count_revendedor() -> None:
-    with create_session() as session:
-        qtd: int =  session.query(Revendedor).count()
+async def select_count_revendedor() -> None:
+    async with create_session() as session:
+        query = select(func.count(Revendedor.id))
+        result = await session.execute(query)
+        qtd: int =  result.scalar()
 
         print(f'Quatidade de revendedores: {qtd}')
 
 
-def select_agregacao() -> None:
-    with create_session() as session:
-        resultado: List = session.query(
+async def select_agregacao() -> None:
+    async with create_session() as session:
+        query = select(
             func.sum(Picole.preco).label('soma'),
             func.avg(Picole.preco).label('media'),
             func.min(Picole.preco).label('mais_barato'),
             func.max(Picole.preco).label('mais_caro'),
-        ).all()
+        )
+        result = await session.execute(query)
+        resultado = result.all()
 
 
         print(f"Resultado: {resultado}")
@@ -140,8 +148,8 @@ if __name__ == '__main__':
     # asyncio.run(select_todos_aditivos_nutritivos())
     # asyncio.run(select_filtro_sabor(21))
     # asyncio.run(select_complexo_picole())
-    asyncio.run(select_order_by_sabor())
-    # select_group_by_picole()
-    # select_limit()
-    # select_count_revendedor()
-    # select_agregacao()
+    # asyncio.run(select_order_by_sabor())
+    # asyncio.run(select_group_by_picole())
+    # asyncio.run(select_limit())
+    # asyncio.run(select_count_revendedor())
+    asyncio.run(select_agregacao())
