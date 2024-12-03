@@ -2,22 +2,28 @@ from typing import Optional
 from conf.db_session import create_session
 from models.revendedor import Revendedor
 from models.picole import Picole
+import asyncio
+from sqlalchemy.future import select
 
 
-def deletar_picole(id_picole: int) -> None:
-    with create_session() as session:
-        picole: Optional[Picole] = session.query(Picole).filter(Picole.id == id_picole).one_or_none()
+async def deletar_picole(id_picole: int) -> None:
+    async with create_session() as session:
+        query = select(Picole).filter(Picole.id == id_picole)
+        result = await session.execute(query)
+        picole: Optional[Picole] = result.unique().scalar_one_or_none()
 
         if picole:
-            session.delete(picole)
-            session.commit()
+            await session.delete(picole)
+            await session.commit()
         else:
             print(f"Picolé de id {id_picole} não encontrado!")
 
 
-def select_filtro_revendedor(id_revendedor: int) -> None:
-    with create_session() as session:
-        revendedor: Optional[Revendedor] = session.query(Revendedor).filter(Revendedor.id == id_revendedor).one_or_none()
+async def select_filtro_revendedor(id_revendedor: int) -> None:
+    async with create_session() as session:
+        query = select(Revendedor).filter(Revendedor.id == id_revendedor)
+        result = await session.execute(query)
+        revendedor: Optional[Revendedor] = result.unique().scalar_one_or_none()
 
         if revendedor:
             print(f'ID: {revendedor.id}')
@@ -26,42 +32,49 @@ def select_filtro_revendedor(id_revendedor: int) -> None:
             print(f'Não encontrei nenhum revendedor com id {id_revendedor}')
 
 
-def deletar_revendedor(id_revendedor: int) -> None:
-    with create_session() as session:
-        revendedor: Optional[Revendedor] = session.query(Revendedor).filter(Revendedor.id == id_revendedor).one_or_none()
+async def deletar_revendedor(id_revendedor: int) -> None:
+    async with create_session() as session:
+        query = select(Revendedor).filter(Revendedor.id == id_revendedor)
+        result = await session.execute(query)
+        revendedor: Optional[Revendedor] = result.unique().scalar_one_or_none()
 
         if revendedor:
-            session.delete(revendedor)
-            session.commit()
+            await session.delete(revendedor)
+            await session.commit()
         else:
             print(f'Não encontrei nenhum revendedor com id {id_revendedor}')
 
 
-if __name__ == '__main__':
-    # from update_main import select_filtro_picole
+async def deleta_picole():
+    from update_main import select_filtro_picole
 
-    # id_picole = 21
-
-    # # Antes
-    # select_filtro_picole(id_picole=id_picole)    
-
-    # # Deletar
-    # deletar_picole(id_picole=id_picole)
-
-    # # Depois
-    # select_filtro_picole(id_picole=id_picole)
-
-    # Nao vinculado
-    id_revendedor_nv = 6
-
-    # Vinculado
-    id_revendedor_v = 2
+    id_picole = 21
 
     # Antes
-    select_filtro_revendedor(id_revendedor=id_revendedor_v)
+    await select_filtro_picole(id_picole=id_picole)    
 
     # Deletar
-    deletar_revendedor(id_revendedor=id_revendedor_v)
+    await deletar_picole(id_picole=id_picole)
 
     # Depois
-    select_filtro_revendedor(id_revendedor=id_revendedor_v)
+    await select_filtro_picole(id_picole=id_picole)
+
+
+
+async def deleta_revendedor():
+    id_revendedor_nv = 2
+    id_revendedor_v = 5
+
+    # Antes
+    await select_filtro_revendedor(id_revendedor=id_revendedor_v)
+
+    # Deletar
+    await deletar_revendedor(id_revendedor=id_revendedor_v)
+
+    # Depois
+    await select_filtro_revendedor(id_revendedor=id_revendedor_v)
+
+
+if __name__ == '__main__':
+    # asyncio.run(deleta_picole())
+    asyncio.run(deleta_revendedor())
