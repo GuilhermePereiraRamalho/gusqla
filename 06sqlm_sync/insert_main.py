@@ -27,14 +27,14 @@ def insert_aditivo_nutritivo() -> AditivoNutritivo:
 
         session.commit()
 
-        return an
+        print('--------------------------------')
+        print('Aditivo Nutritivo cadastrado com sucesso!')
+        print(f'ID: {an.id}')
+        print(f'Data de Criação: {an.data_criacao}')
+        print(f'Nome: {an.nome}')
+        print(f'Formula Química: {an.formula_quimica}')
 
-    # print('--------------------------------')
-    # print('Aditivo Nutritivo cadastrado com sucesso!')
-    # print(f'ID: {an.id}')
-    # print(f'Data de Criação: {an.data_criacao}')
-    # print(f'Nome: {an.nome}')
-    # print(f'Formula Química: {an.formula_quimica}')
+        return an
 
 
 # tabela 2
@@ -272,7 +272,7 @@ def insert_picole() -> None:
 
 if __name__ == '__main__':
     # tabela 1
-    # insert_aditivo_nutritivo()
+    insert_aditivo_nutritivo()
 
     # tabela 2
     # insert_sabor()
@@ -308,4 +308,4 @@ if __name__ == '__main__':
     # insert_nota_fiscal()
 
     # tabela 10
-    insert_picole()
+    # insert_picole()
