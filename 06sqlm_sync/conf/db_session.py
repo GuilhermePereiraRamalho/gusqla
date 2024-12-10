@@ -26,7 +26,7 @@ def create_engine(sqlite: bool = False) -> Engine:
         conn_str = f'sqlite:///{arquivo_db}'
         __engine = _create_engine(url=conn_str, echo=False, connect_args={"check_same_thread": False})
     else:
-        conn_str = "postgresql://postgres:12345@localhost:5432/picoles"
+        conn_str = "postgresql://postgres:etabeta@localhost:5432/picoles"
         __engine = _create_engine(url=conn_str, echo=False)
 
     return __engine

@@ -7,7 +7,7 @@ from models.lote import Lote
 
 class LotesNotaFiscal (SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    id_nota_fical: Optional[int] = Field(default=None, foreign_key="notas_fiscais.id"),
+    id_nota_fiscal: Optional[int] = Field(default=None, foreign_key="notas_fiscais.id")
     id_lote: Optional[int] = Field(default=None, foreign_key="lotes.id")
 
 
@@ -24,7 +24,7 @@ class NotaFiscal(SQLModel, table=True):
     id_revendedor: Optional[int] = Field(foreign_key='revendedores.id')
     revendedor: Revendedor = Relationship(sa_relationship_kwargs={"lazy": "joined", 'cascade':"delete"})
 
-    lotes: List[Lote] = Relationship(link_model=LotesNotaFiscal, back_populates='lote', sa_relationship_kwargs={"lazy": "dynamic"})
+    lotes: List[Lote] = Relationship(link_model=LotesNotaFiscal, sa_relationship_kwargs={"lazy": "dynamic"})
 
     def __repr__(self) -> str:
         return f'<Nota Fiscal: {self.numero_serie}>'

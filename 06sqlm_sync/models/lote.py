@@ -12,7 +12,7 @@ class Lote(SQLModel, table=True):
     data_criacao: datetime = Field(default=datetime.now(), index=True)
 
     id_tipo_picole: Optional[int] = Field(default=None, foreign_key='tipos_picole.id')
-    tipo_picole: TipoPicole = Relationship(back_populates="tipo_picole", sa_relationship_kwargs={"lazy": "joined"})
+    tipo_picole: TipoPicole = Relationship(sa_relationship_kwargs={"lazy": "joined"})
 
     quantidade: int = Field()
 
