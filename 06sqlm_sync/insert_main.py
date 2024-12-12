@@ -52,11 +52,11 @@ def insert_sabor() -> None:
 
         session.commit()
 
-    print('-----------------------------')
-    print('Sabor cadastrado com sucesso!')
-    print(f'ID: {sabor.id}')
-    print(f'Data de Criação: {sabor.data_criacao}')
-    print(f'Nome: {sabor.nome}')
+        print('-----------------------------')
+        print('Sabor cadastrado com sucesso!')
+        print(f'ID: {sabor.id}')
+        print(f'Data de Criação: {sabor.data_criacao}')
+        print(f'Nome: {sabor.nome}')
 
 
 # tabela 3
@@ -74,11 +74,11 @@ def insert_tipo_embalagem() -> None:
 
         session.commit()
 
-    print('-----------------------------------------')
-    print('Tipo de embalagem cadastrado com sucesso!')
-    print(f'ID: {te.id}')
-    print(f'Data de Criação: {te.data_criacao}')
-    print(f'Nome: {te.nome}')
+        print('-----------------------------------------')
+        print('Tipo de embalagem cadastrado com sucesso!')
+        print(f'ID: {te.id}')
+        print(f'Data de Criação: {te.data_criacao}')
+        print(f'Nome: {te.nome}')
 
 
 # tabela 4
@@ -96,11 +96,11 @@ def insert_tipo_picole() -> None:
 
         session.commit()
 
-    print('--------------------------------------')
-    print('Tipo de picolé cadastrado com sucesso!')
-    print(f'ID: {tp.id}')
-    print(f'Data de Criação: {tp.data_criacao}')
-    print(f'Nome: {tp.nome}')
+        print('--------------------------------------')
+        print('Tipo de picolé cadastrado com sucesso!')
+        print(f'ID: {tp.id}')
+        print(f'Data de Criação: {tp.data_criacao}')
+        print(f'Nome: {tp.nome}')
 
 
 # tabela 5
@@ -118,13 +118,14 @@ def insert_ingrediente() -> Ingrediente:
 
         session.commit()
 
-        return ingrediente
+        print('-----------------------------------')
+        print('Ingrediente cadastrado com sucesso!')
+        print(f'ID: {ingrediente.id}')
+        print(f'Data de Criação: {ingrediente.data_criacao}')
+        print(f'Nome: {ingrediente.nome}')
 
-    # print('-----------------------------------')
-    # print('Ingrediente cadastrado com sucesso!')
-    # print(f'ID: {ingrediente.id}')
-    # print(f'Data de Criação: {ingrediente.data_criacao}')
-    # print(f'Nome: {ingrediente.nome}')
+
+        return ingrediente
 
 
 # tabela 6
@@ -142,15 +143,13 @@ def insert_conservante() -> Conservante:
         session.add(conservante)
 
         session.commit()
-
+        print('-----------------------------------')
+        print('Conservante cadastrado com sucesso!')
+        print(f'ID: {conservante.id}')
+        print(f'Data de Criação: {conservante.data_criacao}')
+        print(f'Nome: {conservante.nome}')
+        print(f'Descrição: {conservante.descricao}')
         return conservante
-
-    # print('-----------------------------------')
-    # print('Conservante cadastrado com sucesso!')
-    # print(f'ID: {conservante.id}')
-    # print(f'Data de Criação: {conservante.data_criacao}')
-    # print(f'Nome: {conservante.nome}')
-    # print(f'Descrição: {conservante.descricao}')
 
 
 # tabela 7
@@ -170,7 +169,7 @@ def insert_revendedor() -> Revendedor:
 
         session.commit()
 
-    return revendedor
+        return revendedor
 
 
 # tabela 8
@@ -189,7 +188,7 @@ def insert_lote() -> Lote:
 
         session.commit()
 
-    return lote
+        return lote
 
 
 # tabela 9
@@ -272,10 +271,10 @@ def insert_picole() -> None:
 
 if __name__ == '__main__':
     # tabela 1
-    insert_aditivo_nutritivo()
+    # insert_aditivo_nutritivo()
 
     # tabela 2
-    # insert_sabor()
+    insert_sabor()
 
     # tabela 3
     # insert_tipo_embalagem()

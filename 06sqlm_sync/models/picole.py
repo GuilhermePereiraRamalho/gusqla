@@ -37,7 +37,7 @@ class Picole(SQLModel, table=True):
     __tablename__: str = 'picoles'
 
     id: Optional[int] = Field(default=None, primary_key=True)
-    data_criacao: datetime = Field(default=datetime.now, index=True)
+    data_criacao: datetime = Field(default=datetime.now(), index=True)
     
     preco: condecimal(max_digits=5, decimal_places=2) = Field(default=0) 
 
