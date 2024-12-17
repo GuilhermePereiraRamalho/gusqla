@@ -1,11 +1,12 @@
 from conf.db_session import create_session
 from models.sabor import Sabor
 from models.picole import Picole
+from sqlmodel import select
 
 
 def select_filtro_picole(id_picole: int) -> None:
     with create_session() as session:
-        picole: Picole = session.query(Picole).filter(Picole.id == id_picole).one_or_none()
+        picole: Picole = session.get(Picole, id_picole)
 
         if picole:
             print(f"ID: {picole.id}")
@@ -17,7 +18,7 @@ def select_filtro_picole(id_picole: int) -> None:
 
 def atualizar_sabor(id_sabor: int, novo_nome:str) -> None:
     with create_session() as session:
-        sabor: Sabor = session.query(Sabor).filter(Sabor.id == id_sabor).one_or_none()
+        sabor: Sabor = session.get(Sabor, id_sabor)
 
         if sabor:
             sabor.nome = novo_nome
@@ -28,7 +29,7 @@ def atualizar_sabor(id_sabor: int, novo_nome:str) -> None:
 
 def atualizar_picole(id_picole: int, novo_preco: float, novo_sabor: int = None) -> None:
     with create_session() as session:
-        picole: Picole = session.query(Picole).filter(Picole.id == id_picole).one_or_none()
+        picole: Picole = session.get(Picole, id_picole)
 
         if picole:
             picole.preco = novo_preco
@@ -41,16 +42,16 @@ def atualizar_picole(id_picole: int, novo_preco: float, novo_sabor: int = None) 
 
 if __name__ == '__main__':
     # from select_main import select_filtro_sabor
-    # id_sabor = 43
+    # id_sabor = 42
     # select_filtro_sabor(id_sabor)
 
-    # atualizar_sabor(id_sabor=id_sabor, novo_nome="Laranja")
+    # atualizar_sabor(id_sabor=id_sabor, novo_nome="Banana")
 
     # select_filtro_sabor(id_sabor)
 
     id_picole = 21
-    novo_preco = 9.99
-    id_novo_sabor = 43
+    novo_preco = 6.66
+    id_novo_sabor = 42
 
     select_filtro_picole(id_picole=id_picole)
     atualizar_picole(id_picole=id_picole, novo_preco=novo_preco, novo_sabor=id_novo_sabor)
