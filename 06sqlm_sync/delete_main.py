@@ -4,9 +4,10 @@ from models.revendedor import Revendedor
 from models.picole import Picole
 
 
+
 def deletar_picole(id_picole: int) -> None:
     with create_session() as session:
-        picole: Optional[Picole] = session.query(Picole).filter(Picole.id == id_picole).one_or_none()
+        picole: Optional[Picole] = session.get(Picole, id_picole)
 
         if picole:
             session.delete(picole)
@@ -17,7 +18,7 @@ def deletar_picole(id_picole: int) -> None:
 
 def select_filtro_revendedor(id_revendedor: int) -> None:
     with create_session() as session:
-        revendedor: Optional[Revendedor] = session.query(Revendedor).filter(Revendedor.id == id_revendedor).one_or_none()
+        revendedor: Optional[Revendedor] = session.get(Revendedor, id_revendedor)
 
         if revendedor:
             print(f'ID: {revendedor.id}')
@@ -28,7 +29,7 @@ def select_filtro_revendedor(id_revendedor: int) -> None:
 
 def deletar_revendedor(id_revendedor: int) -> None:
     with create_session() as session:
-        revendedor: Optional[Revendedor] = session.query(Revendedor).filter(Revendedor.id == id_revendedor).one_or_none()
+        revendedor: Optional[Revendedor] = session.get(Revendedor, id_revendedor)
 
         if revendedor:
             session.delete(revendedor)
@@ -51,11 +52,11 @@ if __name__ == '__main__':
     # # Depois
     # select_filtro_picole(id_picole=id_picole)
 
-    # Nao vinculado
-    id_revendedor_nv = 6
+    # # Nao vinculado
+    # id_revendedor_nv = 3
 
     # Vinculado
-    id_revendedor_v = 2
+    id_revendedor_v = 5
 
     # Antes
     select_filtro_revendedor(id_revendedor=id_revendedor_v)
