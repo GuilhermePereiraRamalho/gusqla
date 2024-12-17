@@ -76,7 +76,9 @@ def select_order_by_sabor() -> None:
 
 def select_group_by_picole() -> None:
     with create_session() as session:
-        picoles: List[Picole] = session.query(Picole).group_by(Picole.id, Picole.id_tipo_picole).all()
+        query = select(Picole).group_by(Picole.id, Picole.id_tipo_picole)
+        result =  session.exec(query)
+        picoles: List[Picole] = result.unique().all()
 
         for picole in picoles:
             print(f'ID: {picole.id}')
@@ -87,7 +89,10 @@ def select_group_by_picole() -> None:
 
 def select_limit() -> None:
     with create_session() as session:
-        sabores: List[Sabor] = session.query(Sabor).limit(25)
+        # query = select(Sabor).limit(25)
+        query = select(Sabor).offset(25).limit(25) #comeca a partir do 25
+        result = session.exec(query)
+        sabores: List[Sabor] = result.all()
 
         for sabor in sabores:
             print(f'ID: {sabor.id}')
@@ -124,8 +129,8 @@ if __name__ == '__main__':
     # select_todos_aditivos_nutritivos()
     # select_filtro_sabor(21)
     # select_complexo_picole()
-    select_order_by_sabor()
+    # select_order_by_sabor()
     # select_group_by_picole()
     # select_limit()
-    # select_count_revendedor()
+    select_count_revendedor()
     # select_agregacao()
