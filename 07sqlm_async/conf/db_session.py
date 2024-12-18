@@ -1,21 +1,24 @@
 from pathlib import Path
 from typing import Optional
-from sqlalchemy.future.engine import Engine
-from sqlmodel import Session, SQLModel
+
+from sqlmodel import SQLModel
 from sqlmodel import create_engine as _create_engine
+from sqlmodel.ext.asyncio.session import AsyncSession
+from sqlalchemy.ext.asyncio.engine import AsyncEngine
 
 
 
-__engine: Optional[Engine] = None
+
+__async_engine: Optional[AsyncEngine] = None
 
 
-def create_engine(sqlite: bool = False) -> Engine:
+def create_engine(sqlite: bool = False) -> AsyncEngine:
     """
     Função para configurar a conexão com o banco de dados
     """
-    global __engine
+    global __async_engine
 
-    if __engine:
+    if __async_engine:
         return
     
     if sqlite:
@@ -23,36 +26,37 @@ def create_engine(sqlite: bool = False) -> Engine:
         folder = Path(arquivo_db).parent
         folder.mkdir(parents=True, exist_ok=True)
 
-        conn_str = f'sqlite:///{arquivo_db}'
-        __engine = _create_engine(url=conn_str, echo=False, connect_args={"check_same_thread": False})
+        conn_str = f"sqlite+aiosqlite:///{arquivo_db}"
+        __async_engine = AsyncEngine(_create_engine(url=conn_str, echo=False, connect_args={"check_same_thread": False}))
     else:
-        conn_str = "postgresql://postgres:12345@localhost:5432/picoles"
-        __engine = _create_engine(url=conn_str, echo=False)
+        conn_str = "postgresql+asyncpg://postgres:12345@localhost:5432/picoles"
+        __async_engine = AsyncEngine(_create_engine(url=conn_str, echo=False))
 
-    return __engine
+    return __async_engine
 
 
-def create_session() -> Session:
+def create_session() -> AsyncSession:
     """
     Função para criar a sessão de conexão ao banco de dados
     """
-    global __engine
+    global __async_engine
 
-    if not __engine:
+    if not __async_engine:
         create_engine()
         # create_engine(sqlite=True)
 
-    session: Session = Session(__engine)
+    async_session: AsyncSession = AsyncSession(__async_engine)
 
-    return session
+    return async_session
 
 
-def create_tables() -> None:
-    global __engine
+async def create_tables() -> None:
+    global __async_engine
 
-    if not __engine:
+    if not __async_engine:
         create_engine()
 
     import models.__all_models
-    SQLModel.metadata.drop_all(__engine)
-    SQLModel.metadata.create_all(__engine)
+    async with __async_engine.begin() as conn:
+        await conn.run(SQLModel.metadata.drop_all)
+        await conn.run(SQLModel.metadata.create_all)
