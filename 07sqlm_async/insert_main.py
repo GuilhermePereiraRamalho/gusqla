@@ -9,10 +9,11 @@ from models.revendedor import Revendedor
 from models.lote import Lote
 from models.nota_fiscal import NotaFiscal
 from models.picole import Picole
+import asyncio
 
 
 # tabela 1
-def insert_aditivo_nutritivo() -> AditivoNutritivo:
+async def insert_aditivo_nutritivo() -> AditivoNutritivo:
     print('--------------------------------')
     print('Cadastrando Aditivo Nutritivo...')
     print('--------------------------------')
@@ -22,10 +23,11 @@ def insert_aditivo_nutritivo() -> AditivoNutritivo:
 
     an: AditivoNutritivo = AditivoNutritivo(nome=nome, formula_quimica=formula_quimica)
 
-    with create_session() as session:
+    async with create_session() as session:
         session.add(an)
 
-        session.commit()
+        await session.commit()
+        await session.refresh(an)
 
         print('--------------------------------')
         print('Aditivo Nutritivo cadastrado com sucesso!')
@@ -38,7 +40,7 @@ def insert_aditivo_nutritivo() -> AditivoNutritivo:
 
 
 # tabela 2
-def insert_sabor() -> None:
+async def insert_sabor() -> None:
     print('-----------------')
     print('Cadastrando Sabor')
     print('-----------------')
@@ -47,10 +49,11 @@ def insert_sabor() -> None:
 
     sabor: Sabor = Sabor(nome=nome)
 
-    with create_session() as session:
+    async with create_session() as session:
         session.add(sabor)
 
-        session.commit()
+        await session.commit()
+        await session.refresh(sabor)
 
         print('-----------------------------')
         print('Sabor cadastrado com sucesso!')
@@ -60,7 +63,7 @@ def insert_sabor() -> None:
 
 
 # tabela 3
-def insert_tipo_embalagem() -> None:
+async def insert_tipo_embalagem() -> None:
     print('-----------------------------')
     print('Cadastrando Tipo de Embalagem')
     print('-----------------------------')
@@ -69,10 +72,11 @@ def insert_tipo_embalagem() -> None:
 
     te: TipoEmbalagem = TipoEmbalagem(nome=nome)
 
-    with create_session() as session:
+    async with create_session() as session:
         session.add(te)
 
-        session.commit()
+        await session.commit()
+        await session.refresh(te)
 
         print('-----------------------------------------')
         print('Tipo de embalagem cadastrado com sucesso!')
@@ -82,7 +86,7 @@ def insert_tipo_embalagem() -> None:
 
 
 # tabela 4
-def insert_tipo_picole() -> None:
+async def insert_tipo_picole() -> None:
     print('--------------------------')
     print('Cadastrando Tipo de Picolé')
     print('--------------------------')
@@ -91,10 +95,11 @@ def insert_tipo_picole() -> None:
 
     tp: TipoPicole = TipoPicole(nome=nome)
 
-    with create_session() as session:
+    async with create_session() as session:
         session.add(tp)
 
-        session.commit()
+        await session.commit()
+        await session.refresh(tp)
 
         print('--------------------------------------')
         print('Tipo de picolé cadastrado com sucesso!')
@@ -104,7 +109,7 @@ def insert_tipo_picole() -> None:
 
 
 # tabela 5
-def insert_ingrediente() -> Ingrediente:
+async def insert_ingrediente() -> Ingrediente:
     print('-----------------------')
     print('Cadastrando Ingrediente')
     print('-----------------------')
@@ -113,10 +118,11 @@ def insert_ingrediente() -> Ingrediente:
 
     ingrediente: Ingrediente = Ingrediente(nome=nome)
 
-    with create_session() as session:
+    async with create_session() as session:
         session.add(ingrediente)
 
-        session.commit()
+        await session.commit()
+        await session.refresh(ingrediente)
 
         print('-----------------------------------')
         print('Ingrediente cadastrado com sucesso!')
@@ -129,7 +135,7 @@ def insert_ingrediente() -> Ingrediente:
 
 
 # tabela 6
-def insert_conservante() -> Conservante:
+async def insert_conservante() -> Conservante:
     print('-----------------------')
     print('Cadastrando Conservante')
     print('-----------------------')
@@ -139,10 +145,11 @@ def insert_conservante() -> Conservante:
 
     conservante: Conservante = Conservante(nome=nome, descricao=descricao)
 
-    with create_session() as session:
+    async with create_session() as session:
         session.add(conservante)
 
-        session.commit()
+        await session.commit()
+        await session.refresh(conservante)
         print('-----------------------------------')
         print('Conservante cadastrado com sucesso!')
         print(f'ID: {conservante.id}')
@@ -153,7 +160,7 @@ def insert_conservante() -> Conservante:
 
 
 # tabela 7
-def insert_revendedor() -> Revendedor:
+async def insert_revendedor() -> Revendedor:
     print('----------------------')
     print('Cadastrando Revendedor')
     print('----------------------')
@@ -164,16 +171,17 @@ def insert_revendedor() -> Revendedor:
 
     revendedor: Revendedor = Revendedor(cnpj=cnpj, razao_social=razao_social, contato=contato)
 
-    with create_session() as session:
+    async with create_session() as session:
         session.add(revendedor)
 
-        session.commit()
+        await session.commit()
+        await session.refresh(revendedor)
 
         return revendedor
 
 
 # tabela 8
-def insert_lote() -> Lote:
+async def insert_lote() -> Lote:
     print('----------------')
     print('Cadastrando Lote')
     print('----------------')
@@ -183,16 +191,17 @@ def insert_lote() -> Lote:
 
     lote: Lote = Lote(id_tipo_picole=id_tipo_picole, quantidade=quantidade)
 
-    with create_session() as session:
+    async with create_session() as session:
         session.add(lote)
 
-        session.commit()
+        await session.commit()
+        await session.refresh(lote)
 
         return lote
 
 
 # tabela 9
-def insert_nota_fiscal() -> None:
+async def insert_nota_fiscal() -> None:
     print('-----------------------')
     print('Cadastrando Nota Fiscal')
     print('-----------------------')
@@ -200,20 +209,22 @@ def insert_nota_fiscal() -> None:
     valor: float = input('Informe o valor da nota fiscal: ')
     numero_serie: str = input('Informe o número de serie: ')
     descricao: str = input('Informe a descrição: ')
-    id_revendedor: int = input('Informe o ID do revendedor: ')
+    id_revendedor: int = int(input('Informe o ID do revendedor: '))
 
     nf: NotaFiscal = NotaFiscal(valor=valor, numero_serie=numero_serie, descricao=descricao, id_revendedor=id_revendedor)
 
-    lote1 = insert_lote()
+    lote1 = await insert_lote()
     nf.lotes.append(lote1)
     
-    lote2 = insert_lote()
+    lote2 = await insert_lote()
     nf.lotes.append(lote2)
 
-    with create_session() as session:
+    async with create_session() as session:
         session.add(nf)
 
-        session.commit()
+        await session.commit()
+        await session.refresh(nf)
+
         print('-----------------------------------')
         print('Nota Fiscal cadastrada com sucesso!')
         print(f"ID: {nf.id}")
@@ -226,36 +237,38 @@ def insert_nota_fiscal() -> None:
 
 
 # tabela 10
-def insert_picole() -> None:
+async def insert_picole() -> None:
     print('------------------')
     print('Cadastrando Picolé')
     print('------------------')
 
     preco: float = input('Informe o preço do picolé: ')
-    id_sabor: int = input('Informe o ID do tipo do sabor: ')
-    id_tipo_picole: int = input('Informe o ID do tipo de picolé: ')
-    id_tipo_embalagem: int = input('Informe o ID do tipo da embalagem: ')
+    id_sabor: int = int(input('Informe o ID do tipo do sabor: '))
+    id_tipo_picole: int = int(input('Informe o ID do tipo de picolé: '))
+    id_tipo_embalagem: int = int(input('Informe o ID do tipo da embalagem: '))
 
     picole: Picole = Picole(preco=preco, id_sabor=id_sabor, id_tipo_embalagem=id_tipo_embalagem, id_tipo_picole=id_tipo_picole)
 
-    ingrediente1: Ingrediente = insert_ingrediente()
+    ingrediente1: Ingrediente = await insert_ingrediente()
     picole.ingredientes.append(ingrediente1)
 
-    ingrediente2: Ingrediente = insert_ingrediente()
+    ingrediente2: Ingrediente = await insert_ingrediente()
     picole.ingredientes.append(ingrediente2)
 
     # tem conservantes?
-    conservante: Conservante = insert_conservante()
+    conservante: Conservante = await insert_conservante()
     picole.conservantes.append(conservante)
     
     # tem aditivo nutritivo?
-    aditivo_nutritivo: AditivoNutritivo = insert_aditivo_nutritivo()
+    aditivo_nutritivo: AditivoNutritivo = await insert_aditivo_nutritivo()
     picole.aditivos_nutritivos.append(aditivo_nutritivo)
 
-    with create_session() as session:
+    async with create_session() as session:
         session.add(picole)
 
-        session.commit()
+        await session.commit()
+        await session.refresh(picole)
+
         print('------------------------------')
         print('Picolé cadastrado com sucesso!')
         print(f"ID: {picole.id}")
@@ -271,25 +284,25 @@ def insert_picole() -> None:
 
 if __name__ == '__main__':
     # tabela 1
-    # insert_aditivo_nutritivo()
+    # asyncio.run(insert_aditivo_nutritivo())
 
     # tabela 2
-    insert_sabor()
+    # asyncio.run(insert_sabor())
 
     # tabela 3
-    # insert_tipo_embalagem()
+    # asyncio.run(insert_tipo_embalagem())
 
     # tabela 4
-    # insert_tipo_picole()
+    # asyncio.run(insert_tipo_picole())
 
     # tabela 5
-    # insert_ingrediente()
+    # asyncio.run(insert_ingrediente())
 
     # tabela 6
-    # insert_conservante()
+    # asyncio.run(insert_conservante())
 
     # tabela 7
-    # rev = insert_revendedor()
+    # rev = asyncio.run(insert_revendedor())
     # print(f'ID: {rev.id}')
     # print(f'Data: {rev.data_criacao}')
     # print(f'CNPJ: {rev.cnpj}')
@@ -297,14 +310,14 @@ if __name__ == '__main__':
     # print(f'Contato: {rev.contato}')
 
     # tabela 8
-    # lote = insert_lote()
+    # lote = asyncio.run(insert_lote())
     # print(f'ID: {lote.id}')
     # print(f'Data: {lote.data_criacao}')
     # print(f'ID Tipo Picole: {lote.id_tipo_picole}')
     # print(f'Quantidade: {lote.quantidade}')
 
     # tabela 9
-    # insert_nota_fiscal()
+    # asyncio.run(insert_nota_fiscal())
 
     # tabela 10
-    # insert_picole()
+    asyncio.run(insert_picole())
