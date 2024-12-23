@@ -1,3 +1,4 @@
+import asyncio
 from typing import List
 from sqlalchemy import func
 from sqlmodel import select
@@ -12,10 +13,10 @@ from models.picole import Picole
 
 
 ## Select simples -> SELECT * FROM aditivos_nutritivos
-def select_todos_aditivos_nutritivos() -> None:
-    with create_session() as session:
+async def select_todos_aditivos_nutritivos() -> None:
+    async with create_session() as session:
         query = select(AditivoNutritivo)
-        result = session.exec(query)
+        result = await session.exec(query)
         aditivos_nutritivos: List[AditivoNutritivo] = result.all()
 
         for an in aditivos_nutritivos:
@@ -25,23 +26,23 @@ def select_todos_aditivos_nutritivos() -> None:
             print(f'Fórmula Química: {an.formula_quimica}')
 
 
-def select_filtro_sabor(id_sabor: int) -> None:
-    with create_session() as session:
+async def select_filtro_sabor(id_sabor: int) -> None:
+    async with create_session() as session:
         # query = select(Sabor).filter(Sabor.id == id_sabor)
-        # result = session.exec(query)
+        # result = await session.exec(query)
         # sabor: Sabor = result.one_or_none()
 
-        sabor: Sabor = session.get(Sabor, id_sabor)
+        sabor: Sabor = await session.get(Sabor, id_sabor)
 
         print(f"ID: {sabor.id}")
         print(f"Data: {formata_data(sabor.data_criacao)}")
         print(f"Nome: {sabor.nome}")
 
 
-def select_complexo_picole() -> None:
-    with create_session() as session:
+async def select_complexo_picole() -> None:
+    async with create_session() as session:
         query = select(Picole)
-        result = session.exec(query)
+        result = await session.exec(query)
         picoles: List[Picole] = result.unique().all()
 
         for picole in picoles:
@@ -63,10 +64,10 @@ def select_complexo_picole() -> None:
             print(f'Conservantes: {picole.conservantes}')
 
 
-def select_order_by_sabor() -> None:
-    with create_session() as session:
+async def select_order_by_sabor() -> None:
+    async with create_session() as session:
         query = select(Sabor).order_by(Sabor.data_criacao.desc())
-        result = session.exec(query)
+        result = await session.exec(query)
         sabores: List[Sabor] = result.all()
 
         for sabor in sabores:
@@ -126,11 +127,11 @@ def select_agregacao() -> None:
 
 
 if __name__ == '__main__':
-    # select_todos_aditivos_nutritivos()
-    # select_filtro_sabor(21)
-    # select_complexo_picole()
-    # select_order_by_sabor()
-    # select_group_by_picole()
-    # select_limit()
-    select_count_revendedor()
-    # select_agregacao()
+    # asyncio.run(select_todos_aditivos_nutritivos())
+    # asyncio.run(select_filtro_sabor(21))
+    # asyncio.run(select_complexo_picole())
+    asyncio.run(select_order_by_sabor())
+    # asyncio.run(select_group_by_picole())
+    # asyncio.run(select_limit())
+    # asyncio.run(select_count_revendedor())
+    # asyncio.run(select_agregacao())
